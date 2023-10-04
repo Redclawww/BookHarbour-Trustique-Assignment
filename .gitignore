@@ -1,8 +1,9 @@
 # Libraries
 *.lvlibp
 *.llb
-/BookHarbor Frontend/node_modules
-/BookHarbor Backend/node_modules
+
+# Ignore all folders named "example" regardless of their location in the directory structure
+**/node_modules/
 
 # Shared objects (inc. Windows DLLs)
 *.dll
