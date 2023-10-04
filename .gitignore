@@ -1,6 +1,8 @@
 # Libraries
 *.lvlibp
 *.llb
+/BookHarbor Frontend/node_modules
+/BookHarbor Backend/node_modules
 
 # Shared objects (inc. Windows DLLs)
 *.dll
