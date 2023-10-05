@@ -7,11 +7,12 @@ const BookListing = () => {
     title: "",
     author: "",
     genre: "",
-    price:  ""
+    price: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("authToken")
     const response = await fetch("http://localhost:5000/api/listbook", {
       method: "POST",
       headers: {
@@ -21,7 +22,8 @@ const BookListing = () => {
         title: credentials.title,
         author: credentials.author,
         genre: credentials.genre,
-        price: credentials.price        
+        price: credentials.price,
+        token: token
       }),
     });
     const json = await response.json();
@@ -34,11 +36,9 @@ const BookListing = () => {
     }
   };
 
-  const onChange = async (event)=>{
-    setCredentials({...credentials,
-        [event.target.name]:event.target.value
-    })
-}
+  const onChange = async (event) => {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+  };
 
   return (
     <div className="bg-gray-800 h-screen flex items-center justify-center">
@@ -68,8 +68,8 @@ const BookListing = () => {
             Author
           </label>
           <input
-          onChange={onChange}
-          value={credentials.author}
+            onChange={onChange}
+            value={credentials.author}
             type="text"
             name="author"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
@@ -84,8 +84,8 @@ const BookListing = () => {
             Genre
           </label>
           <input
-          onChange={onChange}
-          value={credentials.genre}
+            onChange={onChange}
+            value={credentials.genre}
             type="text"
             name="genre"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
@@ -94,15 +94,14 @@ const BookListing = () => {
         </div>
         <div className="mb-6">
           <label
-          
             htmlFor="price"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Price
           </label>
           <input
-          onChange={onChange}
-          value={credentials.price}
+            onChange={onChange}
+            value={credentials.price}
             type="text"
             name="price"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
