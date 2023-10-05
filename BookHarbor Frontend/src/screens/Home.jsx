@@ -1,4 +1,5 @@
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import Card from "../components/Card";
@@ -7,23 +8,25 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  // const [foodItem, setfoodItem] = useState([]);
-  // const [foodCat, setfoodCat] = useState([]);
+  const [bookData, setbookData] = useState([]);
 
-  // const loadData = async () => {
-  //     const response = await fetch("http://localhost:5000/api/bookdata", {
-  //         method: "POST",
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         }
-  //     });
-  //     let data = await response.json();
-  //     console.log(data);
-  // }
-  // useEffect(() => {
-  //     loadData();
-  // }, []);
+  const loadData = async () => {
+    const response = await fetch("http://localhost:5000/api/bookdata", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    let data = await response.json();
 
+    setbookData(data);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  console.log(bookData);
   function handleSubmit() {
     if (localStorage.getItem("authToken")) {
       navigate("/Booklisting");
@@ -46,7 +49,7 @@ const Home = () => {
           List your book
         </button>
       </div>
-      <div className="flex items-center justify-center mx-5 rounded-3xl gap-6 mt-10 p-5 border-black border-2 flex-col">
+      <div className="flex items-center justify-center mx-5 rounded-3xl gap-6 my-10 p-5 border-black border-2 flex-col">
         <p className="text-5xl font-extrabold text-cyan-500">Book Shelf</p>
         <input
           className=" w-3/4 peer text-sm text-black px-10 py-3 bg-cyan-200 rounded-3xl border-none"
@@ -56,8 +59,17 @@ const Home = () => {
           placeholder="Search for books"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="">
-          <Card />
+        <div className="w-full flex flex-wrap">
+          {bookData.length !== 0 ? (
+            bookData.map(( book,index) => (
+              <Card
+                key={index}
+                data={book}
+              />
+            ))
+          ) : (
+            <h2>Someone Stole the books</h2>
+          )}
         </div>
       </div>
     </div>
