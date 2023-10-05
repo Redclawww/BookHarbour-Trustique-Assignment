@@ -2,7 +2,7 @@
 *.lvlibp
 *.llb
 
-# Ignore all folders named "example" regardless of their location in the directory structure
+# Ignore all folders named "node_modules" regardless of their location in the directory structure
 **/node_modules/
 
 # Shared objects (inc. Windows DLLs)

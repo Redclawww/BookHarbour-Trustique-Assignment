@@ -7,6 +7,7 @@ import './App.css'
 import Home from "./screens/Home";
 import Signup from "./screens/Signup";
 import Login from "./screens/Login";
+import BookListing from "./screens/BookListing";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/booklisting" element={<BookListing />} />
         </Routes>
       </Router>
     

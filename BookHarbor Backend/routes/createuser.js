@@ -4,7 +4,8 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const jwtsecret = "jahwvchgasvdbcguwabcuabcouawbcecauswf1234$";
+global.secretJWT = "jahwvchgasvdbcguwabcuabcouawbcecauswf1234$";
+const jwtsecret = global.secretJWT;
 
 // User Signup route
 

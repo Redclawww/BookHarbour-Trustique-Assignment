@@ -18,6 +18,10 @@ const BookListing = new Schema({
     price:{
         type: String,
         required: true
+    },
+    user_Id:{
+        type: String,
+        required: true
     }
 });
 
