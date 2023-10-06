@@ -14,7 +14,7 @@ app.use(
 );
 
 router.post("/ListBook", async (req, res) => {
-  const decodedToken = jwt.verify(req.body.token, global.secretJWT);
+  const decodedToken = jwt.verify(req.body.token, process.env.jwtSecret);
   const userId = decodedToken.user.id;
   let success = false;
   try {

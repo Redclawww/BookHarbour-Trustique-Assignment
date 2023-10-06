@@ -2,7 +2,7 @@ const mongoDB = require("./db");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 mongoDB();
 

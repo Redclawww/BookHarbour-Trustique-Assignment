@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
 
-const mongoURI =
-  "mongodb+srv://raghav:mom@clusterbook.4dxnbc1.mongodb.net/BookHarbour?retryWrites=true&w=majority";
+const mongoURI = process.env.DATABASE;
 
 const mongoDB = async () => {
   await mongoose.connect(
@@ -10,7 +10,7 @@ const mongoDB = async () => {
     async (err, result) => {
       if (err) console.log("---", err);
       else {
-        console.log("connected");
+        console.log("Database Connected Successfully");
       }
     }
   );
