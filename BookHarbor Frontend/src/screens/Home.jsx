@@ -11,7 +11,7 @@ const Home = () => {
   const [bookData, setbookData] = useState([]);
 
   const loadData = async () => {
-    const response = await fetch("http://localhost:5000/api/bookdata", {
+    const response = await fetch("https://book-harbor.onrender.com/api/bookdata", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
