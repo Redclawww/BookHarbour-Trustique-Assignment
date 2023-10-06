@@ -4,7 +4,8 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const nodemailer = require("nodemailer");
+const randomString = require("randomstring");
 const jwtsecret = process.env.jwtSecret;
 
 // User Signup route
@@ -102,38 +103,85 @@ router.post(
   }
 );
 
-// router.post("/forgot-password",async(res,req)=>{
-//   const {email} = req.body;
-//  const tempuser = await user.findOne({email: email})
+// Resset Password Route
 
-// // When User does not Exist
-//   if(!tempuser){
-//     res.json({success: false})
-//     return;
-//   }
+const resetPasswordMail = async (email, token) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "redclaww02@gmail.com",
+      port: process.env.PORT,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.email,
+        pass: process.env.pass,
+      },
+    });
 
-// // user exists.. Creating a one time link to chnage password
+    const mailOptions = {
+      from: process.env.email,
+      to: email,
+      subject: "reset password",
+      html: `<p> Hy there, Please copy the link and <a href="https://book-harbor.onrender.com/api/reset-password?${token}">  reset your password</a>`,
+    };
 
-//  const secret = jwtsecret + tempuser.password;
-//  const payload ={
-//   email: email,
-//   id : tempuser._id
-//  }
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Mail has been send", info.response);
+      }
+    });
+  } catch (error) {
+    res.sendStatus(400).send({ success: false, msg: error.message });
+  }
+};
 
-//  const token = jwt.sign(payload, secret,{expiresIn: '15m'})
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const tempuser = await user.findOne({ email: email, msg: error.message });
 
-//  const link = `http://localhost:5000/reset-password/${user._id}/${token}`
+    if (tempuser) {
+      const randomStr = randomString.generate();
+      await user.updateOne({ email: email }, { $set: { token: randomStr } });
+      resetPasswordMail(tempuser.email, randomStr);
+      res
+        .sendStatus(200)
+        .send({ success: true, msg: "reset link has been sent to your mail" });
+    } else {
+      res
+        .sendStatus(200)
+        .send({ success: true, msg: "This email does not exist" });
+    }
+  } catch (error) {
+    res.sendStatus(404).send({ success: false, msg: error.message });
+  }
+});
 
-//  res.sent({success: true});
-
-// });
-
-// router.post('/reset-password',(res,req)=>{
-
-// })
-
-// router.get('/reset-password',(res,req)=>{
-
-// })
+router.get("/reset-password", async (req, res) => {
+  try {
+    const token = req.query.token;
+    const tempData = await user.findOne({ token: token });
+    if (tempData) {
+      const password = req.body.password;
+      let secPassword = await bcrypt.hash(password, salt);
+      const userdata = await user.findByIdAndUpdate(
+        { _id: tempData._id },
+        { $set: { password: secPassword, token, token: "" } },
+        { new: true }
+      );
+      res
+        .status(200)
+        .json({ success: true, msg: "User password has been reset",data: userdata });
+    } else {
+      return res
+        .status(200)
+        .json({ success: true, msg: "This link has been expired" });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, msg: error.message });
+  }
+});
 
 module.exports = router;
