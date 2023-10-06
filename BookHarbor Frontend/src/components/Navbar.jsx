@@ -2,10 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     localStorage.removeItem("authToken");
-    navigate('/login');
-  }
+    navigate("/login");
+  };
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default function Navbar() {
                 </Link>
               </li>
               {localStorage.getItem("authToken") ? (
-                <li> 
+                <li>
                   <Link
                     to="/"
                     className="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0 "
@@ -43,27 +43,35 @@ export default function Navbar() {
               )}
             </ul>
             <div className="flex gap-5">
-              {(!localStorage.getItem("authToken")) ? 
-              <div className="flex gap-5">
-              <button className=" text-gray-900 font-bold py-2 px-4 rounded-full border-2 border-cyan-500">
-                <Link
-                  to="/Login"
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:hover:bg-transparent "
-                >
-                  Login
-                </Link>
-              </button>
-              <button className=" text-white font-bold py-2 px-4 rounded-full bg-transparent border-2 border-cyan-500">
-                <Link
-                  to="/signup"
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  Signup
-                </Link>
-              </button>
-            </div> :<div>
-              <button className="bg-[#DB1B22]  text-white font-bold py-2 px-4 rounded-full" onClick={handleLogout}>Logout</button>
-        </div> }
+              {!localStorage.getItem("authToken") ? (
+                <div className="flex gap-5">
+                  <button className=" text-gray-900 font-bold py-2 px-4 rounded-full border-2 border-cyan-500">
+                    <Link
+                      to="/Login"
+                      className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:hover:bg-transparent "
+                    >
+                      Login
+                    </Link>
+                  </button>
+                  <button className=" text-white font-bold py-2 px-4 rounded-full bg-transparent border-2 border-cyan-500">
+                    <Link
+                      to="/signup"
+                      className="block py-2 pl-3 pr-4 text-gray-900 rounded dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    >
+                      Signup
+                    </Link>
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <button
+                    className="bg-[#DB1B22]  text-white font-bold py-2 px-4 rounded-full"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

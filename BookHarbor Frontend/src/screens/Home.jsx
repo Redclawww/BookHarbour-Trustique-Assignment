@@ -61,12 +61,11 @@ const Home = () => {
         />
         <div className="w-full flex flex-wrap">
           {bookData.length !== 0 ? (
-            bookData.map(( book,index) => (
-              <Card
-                key={index}
-                data={book}
-              />
-            ))
+            bookData
+              .filter((item) =>
+                item.title.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((book, index) => <Card key={index} data={book} />)
           ) : (
             <h2>Someone Stole the books</h2>
           )}

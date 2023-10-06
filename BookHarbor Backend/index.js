@@ -29,7 +29,7 @@ app.use("/api", require("./routes/createuser"));
 
 app.use("/api", require("./routes/ListBook"));
 
-app.use('/api', require("./routes/DisplayData"));
+app.use("/api", require("./routes/DisplayData"));
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

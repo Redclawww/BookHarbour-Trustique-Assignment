@@ -12,7 +12,7 @@ const BookListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("authToken")
+    const token = localStorage.getItem("authToken");
     const response = await fetch("http://localhost:5000/api/listbook", {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ const BookListing = () => {
         author: credentials.author,
         genre: credentials.genre,
         price: credentials.price,
-        token: token
+        token: token,
       }),
     });
     const json = await response.json();

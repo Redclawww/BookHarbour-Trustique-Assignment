@@ -25,23 +25,25 @@ router.post(
     const salt = await bcrypt.genSalt(10);
     let secPassword = await bcrypt.hash(req.body.password, salt);
     try {
-      await user.create({
-        email: req.body.email,
-        password: secPassword,
-      }).then(user=>{
-        const data = {
-          user: {
-              id: user._id
-          }
-      }
-        const authToken = jwt.sign(data, jwtsecret);
+      await user
+        .create({
+          email: req.body.email,
+          password: secPassword,
+        })
+        .then((user) => {
+          const data = {
+            user: {
+              id: user._id,
+            },
+          };
+          const authToken = jwt.sign(data, jwtsecret);
           success = true;
-          res.json({ success, authToken })
-      }).catch(err =>{
-        console.log(err);
-        res.json({ error: "Please enter a unique value." })
-      });
-      
+          res.json({ success, authToken });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.json({ error: "Please enter a unique value." });
+        });
     } catch (error) {
       console.error(error.message);
     }
@@ -131,7 +133,7 @@ router.post(
 // })
 
 // router.get('/reset-password',(res,req)=>{
-  
+
 // })
 
 module.exports = router;
