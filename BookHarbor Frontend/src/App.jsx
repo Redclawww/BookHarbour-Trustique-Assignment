@@ -6,7 +6,7 @@ import Signup from "./screens/Signup";
 import Login from "./screens/Login";
 import BookListing from "./screens/BookListing";
 import ResetPassword from "./screens/ResetPassword";
-import ForgotPassword from "./screens/forgotPassword";
+import ForgotPassword from "./screens/ForgotPassword";
 
 
 function App() {
