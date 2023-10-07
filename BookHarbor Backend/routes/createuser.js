@@ -105,83 +105,68 @@ router.post(
 
 // Resset Password Route
 
-const resetPasswordMail = async (email, token) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      host: "redclaww02@gmail.com",
-      port: process.env.PORT,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: process.env.email,
-        pass: process.env.pass,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.email,
-      to: email,
-      subject: "reset password",
-      html: `<p> Hy there, Please copy the link and <a href="https://book-harbor.onrender.com/api/reset-password?${token}">  reset your password</a>`,
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Mail has been send", info.response);
-      }
-    });
-  } catch (error) {
-    res.sendStatus(400).send({ success: false, msg: error.message });
-  }
-};
-
 router.post("/forgot-password", async (req, res) => {
+  let success = false;
   try {
     const email = req.body.email;
-    const tempuser = await user.findOne({ email: email, msg: error.message });
+    await user.findOne({ email: email }).then(async (user) => {
+      if (!user) {
+        return res.json({ success });
+      }
+      const token = jwt.sign({ id: user._id }, process.env.jwtSecret, {
+        expiresIn: "1d",
+      });
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.email,
+          pass: process.env.pass,
+        },
+      });
 
-    if (tempuser) {
-      const randomStr = randomString.generate();
-      await user.updateOne({ email: email }, { $set: { token: randomStr } });
-      resetPasswordMail(tempuser.email, randomStr);
-      res
-        .sendStatus(200)
-        .send({ success: true, msg: "reset link has been sent to your mail" });
-    } else {
-      res
-        .sendStatus(200)
-        .send({ success: true, msg: "This email does not exist" });
-    }
+      var mailOptions = {
+        from: "harbortest99@gmail.com",
+        to: email,
+        subject: "Reset your password",
+        text: `http://localhost:5173/reset_password/${user._id}/${token}`,
+      };
+
+      await transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          success = true;
+          res.json({ success });
+        }
+      });
+    });
   } catch (error) {
-    res.sendStatus(404).send({ success: false, msg: error.message });
+    res.sendStatus(404).send({ success, msg: error.message });
   }
 });
-
-router.get("/reset-password", async (req, res) => {
-  try {
-    const token = req.query.token;
-    const tempData = await user.findOne({ token: token });
-    if (tempData) {
-      const password = req.body.password;
-      let secPassword = await bcrypt.hash(password, salt);
-      const userdata = await user.findByIdAndUpdate(
-        { _id: tempData._id },
-        { $set: { password: secPassword, token, token: "" } },
-        { new: true }
-      );
-      res
-        .status(200)
-        .json({ success: true, msg: "User password has been reset",data: userdata });
+router.post("/reset-password/:id/:token", async (req, res) => {
+  let success = false;
+  const { id, token } = req.params;
+  const { password } = req.body;
+  jwt.verify(token, process.env.jwtSecret, async (err, decoded) => {
+    if (err) {
+      return res.json({ msg: err.message });
     } else {
-      return res
-        .status(200)
-        .json({ success: true, msg: "This link has been expired" });
+      const salt = await bcrypt.genSalt(10);
+      bcrypt
+        .hash(password, salt)
+        .then((hash) => {
+          user
+            .findByIdAndUpdate({ _id: id }, { password: hash })
+            .then((u) => {
+              success = true;
+              res.json({ success });
+            })
+            .catch((err) => res.json({ success: err.message }));
+        })
+        .catch((err) => res.json({ success: err.message }));
     }
-  } catch (error) {
-    return res.status(400).json({ success: false, msg: error.message });
-  }
+  });
 });
 
 module.exports = router;
