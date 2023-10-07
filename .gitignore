@@ -18,3 +18,5 @@
 *.aliases
 *.lvlps
 .cache/
+# Local Netlify folder
+.netlify

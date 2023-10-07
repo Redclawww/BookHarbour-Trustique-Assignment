@@ -56,10 +56,10 @@ const Home = () => {
           type="search"
           id="search"
           value={search}
-          placeholder="Search for books"
+          placeholder="Search for books by title"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="w-full flex flex-wrap">
+        <div className="w-full flex flex-wrap justify-start">
           {bookData.length !== 0 ? (
             bookData
               .filter((item) =>
@@ -67,7 +67,7 @@ const Home = () => {
               )
               .map((book, index) => <Card key={index} data={book} />)
           ) : (
-            <h2>Someone Stole the books</h2>
+            <h2>Fetching data please wait (from onrender)</h2>
           )}
         </div>
       </div>

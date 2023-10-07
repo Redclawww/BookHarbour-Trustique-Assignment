@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <div>
       <nav className=" border-gray-200 ">
-        <div className="max-w-full flex flex-wrap items-center justify-between py-4 px-20 ">
+        <div className="max-w-screen flex flex-wrap items-center justify-between py-4 px-20 ">
           <Link to="/" className="flex items-center">
             <span className="self-center text-3xl font-semibold whitespace-nowrap italic text-black">
               Book Harbour
@@ -45,22 +45,24 @@ export default function Navbar() {
             <div className="flex gap-5">
               {!localStorage.getItem("authToken") ? (
                 <div className="flex gap-5">
-                  <button className=" text-gray-900 font-bold py-2 px-4 rounded-full border-2 border-cyan-500">
-                    <Link
+                  <Link
                       to="/Login"
-                      className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:hover:bg-transparent "
-                    >
+                      
+                    ><button className=" text-gray-900 font-bold py-2 px-4 rounded-full border-2 border-cyan-500 hover:bg-cyan-500 hover:text-white hover:scale-105 transition-all">
+                    <div className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:hover:bg-transparent ">
                       Login
-                    </Link>
+                    </div>
                   </button>
-                  <button className=" text-white font-bold py-2 px-4 rounded-full bg-transparent border-2 border-cyan-500">
-                    <Link
+                  </Link>
+                  <Link
                       to="/signup"
-                      className="block py-2 pl-3 pr-4 text-gray-900 rounded dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
+                  <button className=" text-white font-bold py-2 px-4 rounded-full bg-transparent border-2 border-cyan-500 hover:bg-cyan-500 hover:text-white hover:scale-105 transition-all">
+                    <div className="block py-2 pl-3 pr-4 text-gray-900 rounded">
                       Signup
-                    </Link>
+                    </div>
                   </button>
+                  </Link>
                 </div>
               ) : (
                 <div>
